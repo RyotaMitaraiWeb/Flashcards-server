@@ -11,9 +11,8 @@ function start(app) {
         const port = process.env.PORT || '5500';
         app.use(express.json());
         app.use(cookieParser(process.env.SECRET));
-        // app.use(urlencoded({ extended: false }));
         app.use(cors({
-            origin: '*',
+            origin: 'http://localhost:3000',
         }));
         yield connectToDB();
         yield configureRoutes(app);

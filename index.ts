@@ -1,11 +1,5 @@
-import dotenv from 'dotenv';
-import express, { Express, Request, Response, NextFunction } from 'express';
+import express, { Express } from 'express';
+import start from './init/app.js';
 const app: Express = express();
 
-dotenv.config();
-
-const port: string | undefined = process.env.PORT || '5500';
-
-app.listen(port, () => {
-    console.log('Listening on port ' + port); 
-});
+start(app);

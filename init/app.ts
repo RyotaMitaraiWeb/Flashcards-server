@@ -10,7 +10,7 @@ async function start(app: Express): Promise<any> {
     dotenv.config();
     const port: string | undefined = process.env.PORT || '5500';
     app.use(express.json());
-    app.use(cookieParser(process.env.SECRET));
+    app.use(cookieParser());
     app.use(cors({
         origin: 'http://localhost:3000',
     }));

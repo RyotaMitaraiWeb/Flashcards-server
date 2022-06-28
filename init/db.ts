@@ -6,7 +6,7 @@ async function connectToDB(): Promise<any> {
     mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-    } as any);
+    });
 
     console.log('connected to DB');
 }

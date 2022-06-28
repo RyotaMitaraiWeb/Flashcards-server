@@ -1,5 +1,7 @@
+import { __awaiter } from "tslib";
 import { Schema, model, Types } from 'mongoose';
-// import bcrypt from 'bcrypt';
+import userService from '../services/user';
+import bcrypt from 'bcrypt';
 const userSchema = new Schema({
     username: {
         type: String,
@@ -46,4 +48,33 @@ const userSchema = new Schema({
     },
 });
 const User = model('User', userSchema);
+userSchema.pre('validate', function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = this;
+        const username = yield userService.findUserByUsername(user.username);
+        if (username !== null) {
+            user.invalidate('username', 'Потребителското име е заето');
+        }
+        const email = yield userService.findUserByEmail(user.email);
+        if (email !== null) {
+            user.invalidate('email', 'Имейлът е зает');
+        }
+        next();
+    });
+});
+userSchema.pre('save', function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = this;
+        if (!user.isModified('password'))
+            return next();
+        try {
+            const hashedPassword = yield bcrypt.hash(user.password, 10);
+            user.password = hashedPassword;
+            return next();
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+});
 export default User;

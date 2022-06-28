@@ -10,7 +10,7 @@ function start(app) {
         dotenv.config();
         const port = process.env.PORT || '5500';
         app.use(express.json());
-        app.use(cookieParser(process.env.SECRET));
+        app.use(cookieParser());
         app.use(cors({
             origin: 'http://localhost:3000',
         }));

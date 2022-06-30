@@ -1,5 +1,5 @@
 import { __awaiter } from "tslib";
-import User from "../models/User";
+import User from "../models/User.js";
 function findUserByUsername(username) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield User.findOne({ username });

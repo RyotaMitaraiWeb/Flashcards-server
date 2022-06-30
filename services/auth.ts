@@ -1,5 +1,7 @@
-import User from '../models/User';
-import jwtService from './jwt';
+import User from '../models/User.js';
+import jwtService from './jwt.js';
+import bcrypt from 'bcrypt';
+import userService from './user.js';
 
 async function register(username: string, password: string, email: string): Promise<string> {
     const user = new User({
@@ -7,15 +9,31 @@ async function register(username: string, password: string, email: string): Prom
         password,
         email,
     });
-
-    const token: string = jwtService.generateToken(user);
+    
     await user.save();
 
+    const token: string = jwtService.generateToken(user);
+    return token;
+}
+
+async function login(username: string, password: string): Promise<string> {
+    const user: any = await userService.findUserByUsername(username);
+    if (!user) {
+        throw new Error('Грешно потребителско име или парола');
+    }
+
+    const comparison: boolean = await bcrypt.compare(password, user.password);
+    if (!comparison) {
+        throw new Error('Грешно потребителско име или парола');
+    }
+
+    const token: string = jwtService.generateToken(user);
     return token;
 }
 
 const authService = {
     register,
+    login,
 }
 
 export default authService;

@@ -1,5 +1,5 @@
-import User from "../models/User";
-import { Document, Types } from 'mongoose';
+import User from "../models/User.js";
+import { Document } from 'mongoose';
 
 async function findUserByUsername(username: string): Promise<Document | null> {
     const user = await User.findOne({ username });
@@ -11,7 +11,7 @@ async function findUserByEmail(email: string): Promise<Document | null> {
     return user;
 }
 
-async function findUserById(id: Types.ObjectId): Promise<Document | null> {
+async function findUserById(id: string): Promise<Document | null> {
     const user = await User.findById(id);
     return user;
 }

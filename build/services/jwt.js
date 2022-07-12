@@ -13,6 +13,7 @@ function generateToken(user) {
 }
 function verifyToken(req, res, next) {
     try {
+        console.log(req.cookies);
         const token = req.cookies.accessToken;
         if (blacklist.has(token)) {
             throw new Error();
@@ -23,7 +24,10 @@ function verifyToken(req, res, next) {
         next();
     }
     catch (err) {
-        res.cookie('accessToken', '');
+        res.cookie('accessToken', '', {
+            secure: false,
+            httpOnly: true,
+        });
         res.status(403).json({
             msg: 'Invalid token',
         });

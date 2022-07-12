@@ -20,6 +20,7 @@ function generateToken(user: any): string {
 
 function verifyToken(req: Express.Request, res: Response, next: NextFunction): void {
     try {
+        console.log(req.cookies);
         const token: string = req.cookies.accessToken;
         if (blacklist.has(token)) {
             throw new Error();
@@ -29,7 +30,10 @@ function verifyToken(req: Express.Request, res: Response, next: NextFunction): v
         req.accessToken = accessToken;
         next();
     } catch (err: any) {
-        res.cookie('accessToken', '');
+        res.cookie('accessToken', '', {
+            secure: false,
+            httpOnly: true,
+        });
         res.status(403).json({
             msg: 'Invalid token',
         });

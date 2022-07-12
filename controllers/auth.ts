@@ -10,6 +10,7 @@ router.post('/register', async (req: Request, res: Response) => {
         const accessToken = await authService.register(username, password, email);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
+            secure: false,
         });
         res.status(201).json({ accessToken });
         console.log('success');
@@ -18,6 +19,7 @@ router.post('/register', async (req: Request, res: Response) => {
         res.status(401).json({
             msg: err.msg,
         });
+        
         res.end();
     }
 });
@@ -30,6 +32,7 @@ router.post('/login', async (req: Request, res: Response) => {
         const accessToken: string = await authService.login(username, password);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
+            secure: false,
         });
         res.status(200).json({ accessToken });
         res.end();
@@ -43,7 +46,10 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 router.get('/logout', jwtService.blacklistToken ,(_req: Express.Request, res: Response) => {
-    res.cookie('accessToken', '');
+    res.cookie('accessToken', '', {
+        httpOnly: true,
+        secure: false,
+    });
     res.status(204).json({});
     res.end();
 });

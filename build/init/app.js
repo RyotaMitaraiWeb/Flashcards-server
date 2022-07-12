@@ -7,12 +7,13 @@ import configureRoutes from './routes.js';
 import cors from 'cors';
 function start(app) {
     return __awaiter(this, void 0, void 0, function* () {
+        app.use(cookieParser());
         dotenv.config();
         const port = process.env.PORT || '5500';
         app.use(express.json());
-        app.use(cookieParser());
         app.use(cors({
             origin: 'http://localhost:3000',
+            credentials: true,
         }));
         yield connectToDB();
         yield configureRoutes(app);

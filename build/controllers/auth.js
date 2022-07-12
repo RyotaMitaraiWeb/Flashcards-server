@@ -10,6 +10,7 @@ router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, functio
         const accessToken = yield authService.register(username, password, email);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
+            secure: false,
         });
         res.status(201).json({ accessToken });
         console.log('success');
@@ -29,6 +30,7 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const accessToken = yield authService.login(username, password);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
+            secure: false,
         });
         res.status(200).json({ accessToken });
         res.end();
@@ -42,7 +44,10 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 }));
 router.get('/logout', jwtService.blacklistToken, (_req, res) => {
-    res.cookie('accessToken', '');
+    res.cookie('accessToken', '', {
+        httpOnly: true,
+        secure: false,
+    });
     res.status(204).json({});
     res.end();
 });

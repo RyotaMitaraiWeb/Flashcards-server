@@ -6,13 +6,14 @@ import configureRoutes from './routes.js';
 
 import cors from 'cors';
 
-async function start(app: Express): Promise<any> {
+async function start(app: Express): Promise<void> {
+    app.use(cookieParser());
     dotenv.config();
     const port: string | undefined = process.env.PORT || '5500';
     app.use(express.json());
-    app.use(cookieParser());
     app.use(cors({
         origin: 'http://localhost:3000',
+        credentials: true,
     }));
 
     await connectToDB();

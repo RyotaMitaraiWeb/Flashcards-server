@@ -16,7 +16,7 @@ async function register(username: string, password: string, email: string): Prom
     return token;
 }
 
-async function login(username: string, password: string): Promise<string> {
+async function login(username: string, password: string): Promise<any> {
     const user: any = await userService.findUserByUsername(username);
     if (!user) {
         throw new Error('Грешно потребителско име или парола');
@@ -26,9 +26,8 @@ async function login(username: string, password: string): Promise<string> {
     if (!comparison) {
         throw new Error('Грешно потребителско име или парола');
     }
-
-    const token: string = jwtService.generateToken(user);
-    return token;
+    
+    return user;
 }
 
 const authService = {

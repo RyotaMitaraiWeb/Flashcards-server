@@ -25,8 +25,7 @@ function login(username, password) {
         if (!comparison) {
             throw new Error('Грешно потребителско име или парола');
         }
-        const token = jwtService.generateToken(user);
-        return token;
+        return user;
     });
 }
 const authService = {

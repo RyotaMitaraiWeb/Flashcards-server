@@ -4,15 +4,18 @@ import jwtService from '../services/jwt.js';
 const router = express.Router();
 
 router.post('/register', async (req: Request, res: Response) => {
-    console.log(req.body);
     try {
         const { username, email, password }: any = req.body;
-        const accessToken = await authService.register(username, password, email);
+        const user = await authService.register(username, password, email);
+        const accessToken: string = jwtService.generateToken(user);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: false,
         });
-        res.status(201).json({ accessToken });
+        res.status(201).json({
+            // id: user._id,
+            // username: user.username,
+        });
         console.log('success');
     } catch (err: any) {
         console.log(err.stack);
@@ -29,18 +32,24 @@ router.post('/login', async (req: Request, res: Response) => {
         const username: string = req.body.username.trim();
         const password: string = req.body.password.trim();
 
-        const accessToken: string = await authService.login(username, password);
+        const user = await authService.login(username, password);
+        const accessToken: string = jwtService.generateToken(user);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: false,
         });
-        res.status(200).json({ accessToken });
+
+        res.status(200).json({
+            id: user._id,
+            username: user.username,
+        });
+
         res.end();
     } catch (err: any) {
-        console.log(err.stack);
         res.status(401).json({
-            msg: 'Could not login'
+            msg: 'Неуспешен вход!'
         });
+
         res.end();
     }
 });

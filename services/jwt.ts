@@ -20,13 +20,11 @@ function generateToken(user: any): string {
 
 function verifyToken(req: Express.Request, res: Response, next: NextFunction): void {
     try {
-        console.log(req.cookies);
         const token: string = req.cookies.accessToken;
         if (blacklist.has(token)) {
             throw new Error();
         }
         const accessToken: string | JwtPayload = jwt.verify(token, '12mgo203gokwasA2O');
-        console.log(accessToken)
         req.accessToken = accessToken;
         next();
     } catch (err: any) {
@@ -37,6 +35,7 @@ function verifyToken(req: Express.Request, res: Response, next: NextFunction): v
         res.status(403).json({
             msg: 'Invalid token',
         });
+
         res.end();
     }
 }

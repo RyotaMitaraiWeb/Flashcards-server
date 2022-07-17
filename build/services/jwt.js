@@ -13,13 +13,11 @@ function generateToken(user) {
 }
 function verifyToken(req, res, next) {
     try {
-        console.log(req.cookies);
         const token = req.cookies.accessToken;
         if (blacklist.has(token)) {
             throw new Error();
         }
         const accessToken = jwt.verify(token, '12mgo203gokwasA2O');
-        console.log(accessToken);
         req.accessToken = accessToken;
         next();
     }

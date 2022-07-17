@@ -16,10 +16,8 @@ router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, functio
         // id: user._id,
         // username: user.username,
         });
-        console.log('success');
     }
     catch (err) {
-        console.log(err.stack);
         res.status(401).json({
             msg: err.msg,
         });
@@ -35,8 +33,9 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: false,
-        });
-        res.status(200).json({
+        })
+            .status(200)
+            .json({
             id: user._id,
             username: user.username,
         });
@@ -49,7 +48,15 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.end();
     }
 }));
-router.get('/logout', jwtService.blacklistToken, (_req, res) => {
+router.get('/isLogged', jwtService.verifyToken, (req, res) => {
+    const token = req.accessToken;
+    res.status(200).json({
+        username: token.username,
+        id: token._id,
+    });
+    res.end();
+});
+router.get('/logout', jwtService.verifyToken, jwtService.blacklistToken, (_req, res) => {
     res.cookie('accessToken', '', {
         httpOnly: true,
         secure: false,

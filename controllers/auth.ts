@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import authService from '../services/auth.js';
 import jwtService from '../services/jwt.js';
+import mapErrors from '../util/errorMapper.js';
 const router = express.Router();
 
 router.post('/register', async (req: Request, res: Response) => {
@@ -13,12 +14,13 @@ router.post('/register', async (req: Request, res: Response) => {
             secure: false,
         });
         res.status(201).json({
-            // id: user._id,
-            // username: user.username,
+            id: user._id,
+            username: user.username,
         });
     } catch (err: any) {
+        const errors = mapErrors(err);
         res.status(401).json({
-            msg: err.msg,
+            errors
         });
 
         res.end();

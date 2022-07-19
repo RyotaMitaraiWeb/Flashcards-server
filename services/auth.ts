@@ -1,9 +1,8 @@
 import User from '../models/User.js';
-import jwtService from './jwt.js';
 import bcrypt from 'bcrypt';
 import userService from './user.js';
 
-async function register(username: string, password: string, email: string): Promise<string> {
+async function register(username: string, password: string, email: string): Promise<any> {
     const user = new User({
         username,
         password,
@@ -12,8 +11,7 @@ async function register(username: string, password: string, email: string): Prom
     
     await user.save();
 
-    const token: string = jwtService.generateToken(user);
-    return token;
+    return user;
 }
 
 async function login(username: string, password: string): Promise<any> {

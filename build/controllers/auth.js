@@ -2,6 +2,7 @@ import { __awaiter } from "tslib";
 import express from 'express';
 import authService from '../services/auth.js';
 import jwtService from '../services/jwt.js';
+import mapErrors from '../util/errorMapper.js';
 const router = express.Router();
 router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -13,13 +14,14 @@ router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, functio
             secure: false,
         });
         res.status(201).json({
-        // id: user._id,
-        // username: user.username,
+            id: user._id,
+            username: user.username,
         });
     }
     catch (err) {
+        const errors = mapErrors(err);
         res.status(401).json({
-            msg: err.msg,
+            errors
         });
         res.end();
     }

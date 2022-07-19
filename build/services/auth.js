@@ -1,6 +1,5 @@
 import { __awaiter } from "tslib";
 import User from '../models/User.js';
-import jwtService from './jwt.js';
 import bcrypt from 'bcrypt';
 import userService from './user.js';
 function register(username, password, email) {
@@ -11,8 +10,7 @@ function register(username, password, email) {
             email,
         });
         yield user.save();
-        const token = jwtService.generateToken(user);
-        return token;
+        return user;
     });
 }
 function login(username, password) {

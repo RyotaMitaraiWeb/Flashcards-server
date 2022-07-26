@@ -1,6 +1,7 @@
 import { __awaiter } from "tslib";
 import express from 'express';
 import authService from '../services/auth.js';
+import userService from '../services/user.js';
 import jwtService from '../services/jwt.js';
 import mapErrors from '../util/errorMapper.js';
 const router = express.Router();
@@ -66,4 +67,23 @@ router.get('/logout', jwtService.verifyToken, jwtService.blacklistToken, (_req, 
     res.status(204).json({});
     res.end();
 });
+router.post('/exists', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const username = (_a = req.body.username) === null || _a === void 0 ? void 0 : _a.trim();
+    const email = (_b = req.body.email) === null || _b === void 0 ? void 0 : _b.trim();
+    let error = '';
+    const usernameIsFree = yield userService.findUserByUsername(username);
+    const emailIsFree = yield userService.findUserByEmail(email);
+    if (username && usernameIsFree !== null) {
+        error = 'Потребителското име е заето';
+    }
+    else if (email && emailIsFree !== null) {
+        error = 'Имейлът е зает';
+    }
+    const status = error !== '' ? 200 : 404;
+    res.status(status).json({
+        error
+    });
+    res.end();
+}));
 export { router };

@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import authService from '../services/auth.js';
+import userService from '../services/user.js';
 import jwtService from '../services/jwt.js';
 import mapErrors from '../util/errorMapper.js';
 const router = express.Router();
@@ -71,6 +72,27 @@ router.get('/logout', jwtService.verifyToken, jwtService.blacklistToken, (_req: 
     });
 
     res.status(204).json({});
+    res.end();
+});
+
+router.post('/exists', async (req: Request, res: Response) => {
+    const username: string = req.body.username?.trim();
+    const email: string = req.body.email?.trim();
+    let error: string = '';
+    const usernameIsFree = await userService.findUserByUsername(username);
+    const emailIsFree = await userService.findUserByEmail(email);
+
+    if (username && usernameIsFree !== null) {
+        error = 'Потребителското име е заето';
+    } else if (email && emailIsFree !== null) {
+        error = 'Имейлът е зает'
+    }
+
+    const status: number = error !== '' ? 200 : 404;
+    res.status(status).json({
+        error
+    });
+
     res.end();
 });
 

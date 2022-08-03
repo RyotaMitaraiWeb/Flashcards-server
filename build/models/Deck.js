@@ -1,4 +1,5 @@
-import { Schema, model, Types } from 'mongoose';
+import mongoose from "mongoose";
+const { Schema, Types, model } = mongoose;
 const deckSchema = new Schema({
     title: {
         type: String,
@@ -12,10 +13,6 @@ const deckSchema = new Schema({
         minlength: [1, 'Описанието трябва да е между 1 и 500 символа'],
         maxlength: [500, 'Описанието трябва да е между 1 и 500 символа']
     },
-    image: {
-        type: String,
-        default: '',
-    },
     author: {
         type: Types.ObjectId,
         ref: 'User',
@@ -26,5 +23,5 @@ const deckSchema = new Schema({
             ref: 'Flashcard',
         }],
 });
-const Deck = model('User', deckSchema);
+const Deck = model('Deck', deckSchema);
 export default Deck;

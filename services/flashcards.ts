@@ -1,6 +1,7 @@
 import { Request } from 'express';
 // import userService from "./user";
 import Deck from '../models/Deck.js';
+import User from '../models/User.js';
 import Flashcard from '../models/Flashcard.js';
 
 
@@ -8,7 +9,6 @@ async function createDeck(data: Request, flashcards: IFlashcard[]): Promise<IDec
     const title: string = data.body.title;
     const description: string = data.body.description;
     const user: any = data.accessToken;
-    console.log(user);
     const author: string = user._id;
 
     const payload = {
@@ -20,6 +20,12 @@ async function createDeck(data: Request, flashcards: IFlashcard[]): Promise<IDec
 
     const deck: IDeck = <IDeck>new Deck(payload);
     await deck.save();
+
+    await User.findByIdAndUpdate(author, {
+        $push: {
+            decks: deck._id
+        }
+    });
 
     return deck;
 }

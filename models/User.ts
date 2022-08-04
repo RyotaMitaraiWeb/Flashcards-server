@@ -43,10 +43,6 @@ const userSchema = new Schema({
             ref: 'Deck',
         },
     ],
-    profilePicture: {
-        type: String,
-        default: '',
-    },
     preferences: {
         type: Types.ObjectId,
         ref: 'Preference',

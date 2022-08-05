@@ -110,6 +110,11 @@ async function editFlashcard(flashcard: IFlashcard, id: string): Promise<IFlashc
     return newFlashcard;
 }
 
+async function deleteDeck(deckId: string): Promise<IDeck> {
+    const deck: IDeck = <IDeck>await Deck.findByIdAndDelete(deckId);
+    return deck;
+}
+
 const flashcardService = {
     getDeck,
     getDecks,
@@ -119,6 +124,7 @@ const flashcardService = {
     createFlashcard,
     editDeck,
     editFlashcard,
+    deleteDeck,
 };
 
 export default flashcardService;

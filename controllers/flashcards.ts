@@ -54,20 +54,31 @@ router.post('/flashcard/create', jwtService.verifyToken, async (req: Request, re
 router.put('/flashcard/:id/edit', jwtService.verifyToken, isAuthor, isAuthorized, async (req: Request, res: Response) => {
 
     try {
-        const id: string = req.params.id;        
+        const id: string = req.params.id;
         const flashcards: IFlashcard[] = req.body.flashcards;
-        
+
         const newFlashcards: IFlashcard[] = await Promise.all(flashcards.map(async (f: IFlashcard) => {
             return await flashcardService.editFlashcard(f, f._id)
         }));
 
         const newDeck: IDeck = await flashcardService.editDeck(req, id, newFlashcards);
-        
+
         res.status(202).json(newDeck._id).end();
 
     } catch (err) {
         const errors = mapErrors(err);
 
+        res.status(400).json(errors).end();
+    }
+});
+
+router.delete('/flashcard/:id/delete', jwtService.verifyToken, isAuthor, isAuthorized, async (req: Request, res: Response) => {
+    try {
+        const id: string = req.params.id;
+        const deck: IDeck = await flashcardService.deleteDeck(id);
+        res.status(202).json(deck._id).end();
+    } catch (err) {
+        const errors = mapErrors(err);
         res.status(400).json(errors).end();
     }
 });

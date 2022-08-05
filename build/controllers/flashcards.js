@@ -64,4 +64,15 @@ router.put('/flashcard/:id/edit', jwtService.verifyToken, isAuthor, isAuthorized
         res.status(400).json(errors).end();
     }
 }));
+router.delete('/flashcard/:id/delete', jwtService.verifyToken, isAuthor, isAuthorized, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.params.id;
+        const deck = yield flashcardService.deleteDeck(id);
+        res.status(202).json(deck._id).end();
+    }
+    catch (err) {
+        const errors = mapErrors(err);
+        res.status(400).json(errors).end();
+    }
+}));
 export { router };

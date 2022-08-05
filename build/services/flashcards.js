@@ -103,6 +103,12 @@ function editFlashcard(flashcard, id) {
         return newFlashcard;
     });
 }
+function deleteDeck(deckId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const deck = yield Deck.findByIdAndDelete(deckId);
+        return deck;
+    });
+}
 const flashcardService = {
     getDeck,
     getDecks,
@@ -112,5 +118,6 @@ const flashcardService = {
     createFlashcard,
     editDeck,
     editFlashcard,
+    deleteDeck,
 };
 export default flashcardService;

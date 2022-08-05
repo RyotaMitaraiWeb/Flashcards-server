@@ -20,10 +20,9 @@ router.post('/register', async (req: Request, res: Response) => {
         });
     } catch (err: any) {
         const errors = mapErrors(err);
-        res.status(401).json({
-            errors
-        });
-
+        res.status(401).json(errors);
+        console.log(errors);
+        
         res.end();
     }
 });

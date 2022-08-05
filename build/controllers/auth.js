@@ -21,9 +21,8 @@ router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (err) {
         const errors = mapErrors(err);
-        res.status(401).json({
-            errors
-        });
+        res.status(401).json(errors);
+        console.log(errors);
         res.end();
     }
 }));

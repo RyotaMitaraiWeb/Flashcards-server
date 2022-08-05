@@ -18,13 +18,21 @@ const deckSchema = new Schema({
     author: {
         type: Types.ObjectId,
         ref: 'User',
-        required: [true, "Авторът липсва"]
+        required: [true, 'Авторът липсва']
     },
+
+    authorUsername: {
+        type: String,
+        required: [true, 'Потребителското име на автора липсва'],
+    },
+
     flashcards: [{
         type: Types.ObjectId,
         ref: 'Flashcard',
     }],
 
+}, {
+    timestamps: true,
 });
 
 const Deck = model('Deck', deckSchema);

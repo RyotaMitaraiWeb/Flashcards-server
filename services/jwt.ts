@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import jsonwebtoken, { JwtPayload } from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
 
 const blacklist: Set<string> = new Set();
 
@@ -24,7 +24,7 @@ function verifyToken(req: Express.Request, res: Response, next: NextFunction): v
         if (blacklist.has(token)) {
             throw new Error();
         }
-        const accessToken: string | JwtPayload = jwt.verify(token, '12mgo203gokwasA2O');
+        const accessToken: IToken = <IToken>jwt.verify(token, '12mgo203gokwasA2O');
         req.accessToken = accessToken;
         next();
     } catch (err: any) {

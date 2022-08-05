@@ -25,12 +25,19 @@ declare global {
         back: string,
     }
 
+    interface IToken extends JwtPayload {
+        username: string,
+        _id: string,
+    }
+
     namespace Express {
         interface Request {
             cookies: {
                 accessToken: string,
             },
-            accessToken: string | JwtPayload,
+            accessToken: IToken,
+            isAuthor: boolean,
+            deck: IDeck,
         }
     }
 }

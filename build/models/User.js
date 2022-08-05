@@ -76,13 +76,11 @@ userSchema.pre('save', function (next) {
                 colorTheme: 'purple',
                 animation: 'vertical',
             });
-            console.log(preferences);
             yield preferences.save();
             user.preferences = preferences._id;
             return next();
         }
         catch (err) {
-            console.log(err.message);
             return next(err);
         }
     });

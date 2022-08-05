@@ -1,26 +1,28 @@
 import { __awaiter } from "tslib";
+// import { isAuthor } from '../middlewares/guards.js';
 import flashcardService from '../services/flashcards.js';
 import jwtService from '../services/jwt.js';
 import mapErrors from '../util/errorMapper.js';
 import { router } from './auth.js';
-router.get('/saved', jwtService.verifyToken, (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).json([
-        {
-            title: 'War',
-            author: 'Ryota',
-            authorId: '15',
-            date: '02-02-2022',
-            id: 1,
-        },
-        {
-            title: 'Lorem lorem Lorem lorem Lorem lorem Lorem lorem Lorem lorem Lorem lorem ',
-            author: 'admin',
-            authorId: '112',
-            date: '04-06-2050',
-            id: 2,
-        }
-    ]);
-    res.end();
+router.get('/flashcard/saved', jwtService.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.accessToken._id;
+        const decks = yield flashcardService.getDecks(id);
+        res.status(200).json(decks).end();
+    }
+    catch (err) {
+        const errors = mapErrors(err);
+        res.status(404).json(errors).end();
+    }
+}));
+router.get('/flashcard/:id', jwtService.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const deck = yield flashcardService.getDeck(id);
+    const flashcards = yield flashcardService.getFlashcards(deck);
+    res.status(200).json({
+        deck,
+        flashcards,
+    }).end();
 }));
 router.post('/flashcard/create', jwtService.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let deck = null;
@@ -38,7 +40,6 @@ router.post('/flashcard/create', jwtService.verifyToken, (req, res) => __awaiter
     }
     catch (err) {
         const errors = mapErrors(err);
-        console.log(errors);
         res.status(403).json(errors).end();
     }
 }));

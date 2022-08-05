@@ -60,8 +60,8 @@ async function createDeck(data: Request, flashcards: IFlashcard[]): Promise<IDec
 }
 
 async function createFlashcard(data: any): Promise<IFlashcard> {
-    const front: string = data.front.content.trim();
-    const back: string = data.back.content.trim();
+    const front: string = data.front.trim();
+    const back: string = data.back.trim();
 
     const flashcard: IFlashcard = <IFlashcard>new Flashcard({
         front,
@@ -72,13 +72,53 @@ async function createFlashcard(data: any): Promise<IFlashcard> {
     return flashcard;
 }
 
+async function editDeck(data: Request, deckId: string, flashcards: IFlashcard[]) {    
+    const title: string = data.body.title;
+    const description: string = data.body.description;
+    const user: IToken = data.accessToken;
+
+    const author: string = user._id;
+    const authorUsername: string = user.username;
+
+    const payload = {
+        title,
+        description,
+        author,
+        authorUsername,
+        flashcards,
+    };    
+    
+    const deck: IDeck = <IDeck>await Deck.findByIdAndUpdate(deckId, payload, {
+        runValidators: true,
+    });
+
+    await deck.save();
+//
+    return deck;
+}
+
+async function editFlashcard(flashcard: IFlashcard, id: string): Promise<IFlashcard> {
+    console.log(id);
+    
+    const newFlashcard: IFlashcard = <IFlashcard>await Flashcard.findByIdAndUpdate(id, {
+        front: flashcard.front,
+        back: flashcard.back,
+    }, {
+        runValidators: true
+    });
+
+    return newFlashcard;
+}
+
 const flashcardService = {
     getDeck,
     getDecks,
     getFlashcard,
     getFlashcards,
     createDeck,
-    createFlashcard
+    createFlashcard,
+    editDeck,
+    editFlashcard,
 };
 
 export default flashcardService;

@@ -80,14 +80,11 @@ userSchema.pre('save', async function (next) {
             animation: 'vertical',
         });
 
-        console.log(preferences);
-
         await preferences.save();
 
         user.preferences = preferences._id;
         return next();
     } catch (err: any) {
-        console.log(err.message);
         return next(err);
     }
 });

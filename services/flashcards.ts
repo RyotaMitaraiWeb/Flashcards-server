@@ -4,17 +4,46 @@ import Deck from '../models/Deck.js';
 import User from '../models/User.js';
 import Flashcard from '../models/Flashcard.js';
 
+async function getDeck(id: string): Promise<IDeck> {
+    const deck = <IDeck>await Deck.findById(id);
+    return deck;
+}
+
+async function getDecks(userId: string): Promise<IDeck[]> {
+    const user: any = await User.findById(userId);
+    const decks: IDeck[] = await Promise.all(user.decks.map(async (d: string) => {
+        return await getDeck(d);
+    }));
+
+    const filteredDecks: IDeck[] = decks.filter((d: IDeck) => d !== null);
+    return filteredDecks;
+}
+
+async function getFlashcard(id: string): Promise<IFlashcard> {
+    const flashcard = <IFlashcard>await Flashcard.findById(id);
+    return flashcard;
+}
+
+async function getFlashcards(deck: IDeck): Promise<IFlashcard[]> {
+    const flashcards: IFlashcard[] = await Promise.all(deck.flashcards.map(async (f: IFlashcard) => {
+        return await getFlashcard(f._id);
+    }));
+
+    return flashcards
+}
 
 async function createDeck(data: Request, flashcards: IFlashcard[]): Promise<IDeck> {
     const title: string = data.body.title;
     const description: string = data.body.description;
-    const user: any = data.accessToken;
+    const user: IToken = data.accessToken;
     const author: string = user._id;
+    const authorUsername: string = user.username;
 
     const payload = {
         title,
         description,
         author,
+        authorUsername,
         flashcards,
     };
 
@@ -44,6 +73,10 @@ async function createFlashcard(data: any): Promise<IFlashcard> {
 }
 
 const flashcardService = {
+    getDeck,
+    getDecks,
+    getFlashcard,
+    getFlashcards,
     createDeck,
     createFlashcard
 };

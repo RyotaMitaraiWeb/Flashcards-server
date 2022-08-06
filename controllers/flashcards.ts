@@ -8,6 +8,8 @@ import { router } from './auth.js';
 router.get('/flashcard/saved', jwtService.verifyToken, async (req: Request, res: Response) => {
     try {
         const id: string = req.accessToken._id;
+        // console.log();
+        
         const decks: IDeck[] = await flashcardService.getDecks(id)
 
         res.status(200).json(decks).end();
@@ -17,15 +19,18 @@ router.get('/flashcard/saved', jwtService.verifyToken, async (req: Request, res:
     }
 });
 
-router.get('/flashcard/:id', jwtService.verifyToken, async (req: Request, res: Response) => {
-    try {
-        const id: string = req.params.id;
+router.get('/flashcard/:id', async (req: Request, res: Response) => {
+    try {        
+        const id: string = req.params.id;        
         const deck = await flashcardService.getDeck(id);
+        
         const flashcards: IFlashcard[] = await flashcardService.getFlashcards(deck);
         res.status(200).json({
             deck,
             flashcards,
         }).end();
+
+
     } catch (err) {
         const errors = mapErrors(err);
         res.status(404).json(errors).end();
@@ -56,17 +61,14 @@ router.put('/flashcard/:id/edit', jwtService.verifyToken, isAuthor, isAuthorized
     try {
         const id: string = req.params.id;
         const flashcards: IFlashcard[] = req.body.flashcards;
-
-        const newFlashcards: IFlashcard[] = await Promise.all(flashcards.map(async (f: IFlashcard) => {
-            return await flashcardService.editFlashcard(f, f._id)
-        }));
-
+        const newFlashcards: IFlashcard[] = await Promise.all(flashcards.map(async (f: any) => await flashcardService.createFlashcard(f)));
         const newDeck: IDeck = await flashcardService.editDeck(req, id, newFlashcards);
-
         res.status(202).json(newDeck._id).end();
 
-    } catch (err) {
+    } catch (err) {        
         const errors = mapErrors(err);
+        console.log(errors);
+        
 
         res.status(400).json(errors).end();
     }

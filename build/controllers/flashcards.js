@@ -7,6 +7,7 @@ import { router } from './auth.js';
 router.get('/flashcard/saved', jwtService.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.accessToken._id;
+        // console.log();
         const decks = yield flashcardService.getDecks(id);
         res.status(200).json(decks).end();
     }
@@ -15,7 +16,7 @@ router.get('/flashcard/saved', jwtService.verifyToken, (req, res) => __awaiter(v
         res.status(404).json(errors).end();
     }
 }));
-router.get('/flashcard/:id', jwtService.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/flashcard/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
         const deck = yield flashcardService.getDeck(id);
@@ -53,14 +54,13 @@ router.put('/flashcard/:id/edit', jwtService.verifyToken, isAuthor, isAuthorized
     try {
         const id = req.params.id;
         const flashcards = req.body.flashcards;
-        const newFlashcards = yield Promise.all(flashcards.map((f) => __awaiter(void 0, void 0, void 0, function* () {
-            return yield flashcardService.editFlashcard(f, f._id);
-        })));
+        const newFlashcards = yield Promise.all(flashcards.map((f) => __awaiter(void 0, void 0, void 0, function* () { return yield flashcardService.createFlashcard(f); })));
         const newDeck = yield flashcardService.editDeck(req, id, newFlashcards);
         res.status(202).json(newDeck._id).end();
     }
     catch (err) {
         const errors = mapErrors(err);
+        console.log(errors);
         res.status(400).json(errors).end();
     }
 }));

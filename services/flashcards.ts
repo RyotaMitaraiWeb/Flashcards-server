@@ -25,7 +25,7 @@ async function getFlashcard(id: string): Promise<IFlashcard> {
 }
 
 async function getFlashcards(deck: IDeck): Promise<IFlashcard[]> {
-    const flashcards: IFlashcard[] = await Promise.all(deck.flashcards.map(async (f: IFlashcard) => {
+    const flashcards: IFlashcard[] = await Promise.all(deck.flashcards.filter((f: IFlashcard) => f !== null).map(async (f: IFlashcard) => {
         return await getFlashcard(f._id);
     }));
 
@@ -97,19 +97,6 @@ async function editDeck(data: Request, deckId: string, flashcards: IFlashcard[])
     return deck;
 }
 
-async function editFlashcard(flashcard: IFlashcard, id: string): Promise<IFlashcard> {
-    console.log(id);
-    
-    const newFlashcard: IFlashcard = <IFlashcard>await Flashcard.findByIdAndUpdate(id, {
-        front: flashcard.front,
-        back: flashcard.back,
-    }, {
-        runValidators: true
-    });
-
-    return newFlashcard;
-}
-
 async function deleteDeck(deckId: string): Promise<IDeck> {
     const deck: IDeck = <IDeck>await Deck.findByIdAndDelete(deckId);
     return deck;
@@ -123,7 +110,6 @@ const flashcardService = {
     createDeck,
     createFlashcard,
     editDeck,
-    editFlashcard,
     deleteDeck,
 };
 

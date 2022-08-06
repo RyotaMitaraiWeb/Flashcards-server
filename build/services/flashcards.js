@@ -27,7 +27,7 @@ function getFlashcard(id) {
 }
 function getFlashcards(deck) {
     return __awaiter(this, void 0, void 0, function* () {
-        const flashcards = yield Promise.all(deck.flashcards.map((f) => __awaiter(this, void 0, void 0, function* () {
+        const flashcards = yield Promise.all(deck.flashcards.filter((f) => f !== null).map((f) => __awaiter(this, void 0, void 0, function* () {
             return yield getFlashcard(f._id);
         })));
         return flashcards;
@@ -91,18 +91,6 @@ function editDeck(data, deckId, flashcards) {
         return deck;
     });
 }
-function editFlashcard(flashcard, id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        console.log(id);
-        const newFlashcard = yield Flashcard.findByIdAndUpdate(id, {
-            front: flashcard.front,
-            back: flashcard.back,
-        }, {
-            runValidators: true
-        });
-        return newFlashcard;
-    });
-}
 function deleteDeck(deckId) {
     return __awaiter(this, void 0, void 0, function* () {
         const deck = yield Deck.findByIdAndDelete(deckId);
@@ -117,7 +105,6 @@ const flashcardService = {
     createDeck,
     createFlashcard,
     editDeck,
-    editFlashcard,
     deleteDeck,
 };
 export default flashcardService;

@@ -18,6 +18,15 @@ router.get('/flashcard/saved', jwtService.verifyToken, (req, res) => __awaiter(v
         res.status(404).json(errors).end();
     }
 }));
+router.get('/flashcard/random', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const deck = yield flashcardService.getRandomDeck();
+    if (deck === undefined) {
+        res.status(404).json('Няма тестета!');
+    }
+    else {
+        res.status(200).json(deck._id);
+    }
+}));
 router.get('/flashcard/all', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const decks = yield flashcardService.getAllDecks();

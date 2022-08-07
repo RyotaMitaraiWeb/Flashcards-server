@@ -22,6 +22,15 @@ router.get('/flashcard/saved', jwtService.verifyToken, async (req: Request, res:
     }
 });
 
+router.get('/flashcard/random', async (_req: Request, res: Response) => {
+    const deck: IDeck = await flashcardService.getRandomDeck();
+    if (deck === undefined) {
+        res.status(404).json('Няма тестета!');
+    } else {
+        res.status(200).json(deck._id);
+    }
+});
+
 router.get('/flashcard/all', async (_req: Request, res: Response) => {
     try {
         const decks: IDeck[] = await flashcardService.getAllDecks();

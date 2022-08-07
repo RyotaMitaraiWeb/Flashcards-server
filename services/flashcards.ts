@@ -8,6 +8,13 @@ async function getDeck(id: string): Promise<IDeck> {
     return deck;
 }
 
+async function getRandomDeck(): Promise<IDeck> {
+    const decks: IDeck[] = await getAllDecks();
+    const length: number = decks.length;
+    const random: number = Math.floor(Math.random() * length);
+    return decks[random];
+}
+
 async function getDecks(userId: string): Promise<IDeck[]> {
     const user: any = await User.findById(userId);
     const decks: IDeck[] = await Promise.all(user.decks.map(async (d: string) => {
@@ -125,6 +132,7 @@ async function deleteDeck(deckId: string): Promise<IDeck> {
 const flashcardService = {
     getDeck,
     getDecks,
+    getRandomDeck,
     getAllDecks,
     bookMarkDeck,
     unbookMarkDeck,

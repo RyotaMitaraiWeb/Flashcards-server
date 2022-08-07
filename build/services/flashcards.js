@@ -8,6 +8,14 @@ function getDeck(id) {
         return deck;
     });
 }
+function getRandomDeck() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const decks = yield getAllDecks();
+        const length = decks.length;
+        const random = Math.floor(Math.random() * length);
+        return decks[random];
+    });
+}
 function getDecks(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield User.findById(userId);
@@ -123,6 +131,7 @@ function deleteDeck(deckId) {
 const flashcardService = {
     getDeck,
     getDecks,
+    getRandomDeck,
     getAllDecks,
     bookMarkDeck,
     unbookMarkDeck,

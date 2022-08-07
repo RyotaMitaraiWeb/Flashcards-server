@@ -8,7 +8,7 @@ To run the server, navigate to the root directory in your terminal and run:
 npm install
 npm start
 ```
-The following should appear the terminal
+The following should appear on the terminal
 ```bash
 connected to DB
 Listening on port {PORT}

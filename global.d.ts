@@ -38,6 +38,8 @@ declare global {
             accessToken: IToken,
             isAuthor: boolean,
             deck: IDeck,
+            hasBookmarked: boolean,
+            canBookmark: boolean,
         }
     }
 }

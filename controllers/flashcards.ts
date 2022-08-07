@@ -1,7 +1,10 @@
 import { Request, Response } from 'express'
+import { Types } from 'mongoose';
+import { hasBookmarked } from '../middlewares/bookmark.js';
 import { isAuthor, isAuthorized } from '../middlewares/guards.js';
 import flashcardService from '../services/flashcards.js';
 import jwtService from '../services/jwt.js';
+import userService from '../services/user.js';
 import mapErrors from '../util/errorMapper.js';
 import { router } from './auth.js';
 
@@ -41,6 +44,42 @@ router.get('/flashcard/:id', async (req: Request, res: Response) => {
         }).end();
 
 
+    } catch (err) {
+        const errors = mapErrors(err);
+        res.status(404).json(errors).end();
+    }
+});
+
+router.get('/flashcard/:id/hasBookmarked', jwtService.verifyToken, isAuthor, hasBookmarked, async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const userId = req.accessToken._id;
+
+    const user: any = await userService.findUserById(userId);
+    const decks = user.decks.map((d: Types.ObjectId) => d.toString());
+    if (decks.includes(id)) {
+        res.status(200).end();
+    } else {
+        res.status(404).end();
+    }
+});
+
+router.post('/flashcard/:id/bookmark', jwtService.verifyToken, isAuthor, hasBookmarked, async (req: Request, res: Response) => {
+    const id: string = req.params.id;
+    const userId: string = req.accessToken._id;
+
+    const hasBookmarked: boolean = req.hasBookmarked;
+    try {
+        if (!req.isAuthor) {
+            if (!hasBookmarked) {
+                await flashcardService.bookMarkDeck(userId, id);
+                res.status(201).json('Added successfully').end;
+            } else {
+                await flashcardService.unbookMarkDeck(userId, id);
+                res.status(202).json('Removed successfully').end();
+            }
+        } else {
+            res.status(403).json('Cannot bookmark').end();
+        }
     } catch (err) {
         const errors = mapErrors(err);
         res.status(404).json(errors).end();

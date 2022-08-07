@@ -1,5 +1,4 @@
 import { __awaiter } from "tslib";
-// import userService from "./user";
 import Deck from '../models/Deck.js';
 import User from '../models/User.js';
 import Flashcard from '../models/Flashcard.js';
@@ -23,6 +22,24 @@ function getAllDecks() {
     return __awaiter(this, void 0, void 0, function* () {
         const decks = yield Deck.find({});
         return decks;
+    });
+}
+function bookMarkDeck(userId, deckId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield User.findByIdAndUpdate(userId, {
+            $push: {
+                decks: deckId,
+            }
+        });
+    });
+}
+function unbookMarkDeck(userId, deckId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield User.findByIdAndUpdate(userId, {
+            $pull: {
+                decks: deckId,
+            }
+        });
     });
 }
 function getFlashcard(id) {
@@ -107,6 +124,8 @@ const flashcardService = {
     getDeck,
     getDecks,
     getAllDecks,
+    bookMarkDeck,
+    unbookMarkDeck,
     getFlashcard,
     getFlashcards,
     createDeck,

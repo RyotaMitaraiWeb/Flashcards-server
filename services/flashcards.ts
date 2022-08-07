@@ -1,9 +1,7 @@
 import { Request } from 'express';
-// import userService from "./user";
 import Deck from '../models/Deck.js';
 import User from '../models/User.js';
 import Flashcard from '../models/Flashcard.js';
-
 
 async function getDeck(id: string): Promise<IDeck> {
     const deck = <IDeck>await Deck.findById(id);
@@ -23,6 +21,22 @@ async function getDecks(userId: string): Promise<IDeck[]> {
 async function getAllDecks(): Promise<IDeck[]> {
     const decks: IDeck[] = <IDeck[]>await Deck.find({});
     return decks;
+}
+
+async function bookMarkDeck(userId: string, deckId: string): Promise<void> {
+    await User.findByIdAndUpdate(userId, {
+        $push: {
+            decks: deckId,
+        }
+    });
+}
+
+async function unbookMarkDeck(userId: string, deckId: string): Promise<void> {
+    await User.findByIdAndUpdate(userId, {
+        $pull: {
+            decks: deckId,
+        }
+    });
 }
 
 async function getFlashcard(id: string): Promise<IFlashcard> {
@@ -112,6 +126,8 @@ const flashcardService = {
     getDeck,
     getDecks,
     getAllDecks,
+    bookMarkDeck,
+    unbookMarkDeck,
     getFlashcard,
     getFlashcards,
     createDeck,

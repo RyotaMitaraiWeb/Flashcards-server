@@ -1,7 +1,9 @@
 import { __awaiter } from "tslib";
+import { hasBookmarked } from '../middlewares/bookmark.js';
 import { isAuthor, isAuthorized } from '../middlewares/guards.js';
 import flashcardService from '../services/flashcards.js';
 import jwtService from '../services/jwt.js';
+import userService from '../services/user.js';
 import mapErrors from '../util/errorMapper.js';
 import { router } from './auth.js';
 router.get('/flashcard/saved', jwtService.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -35,6 +37,42 @@ router.get('/flashcard/:id', (req, res) => __awaiter(void 0, void 0, void 0, fun
             deck,
             flashcards,
         }).end();
+    }
+    catch (err) {
+        const errors = mapErrors(err);
+        res.status(404).json(errors).end();
+    }
+}));
+router.get('/flashcard/:id/hasBookmarked', jwtService.verifyToken, isAuthor, hasBookmarked, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const userId = req.accessToken._id;
+    const user = yield userService.findUserById(userId);
+    const decks = user.decks.map((d) => d.toString());
+    if (decks.includes(id)) {
+        res.status(200).end();
+    }
+    else {
+        res.status(404).end();
+    }
+}));
+router.post('/flashcard/:id/bookmark', jwtService.verifyToken, isAuthor, hasBookmarked, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const userId = req.accessToken._id;
+    const hasBookmarked = req.hasBookmarked;
+    try {
+        if (!req.isAuthor) {
+            if (!hasBookmarked) {
+                yield flashcardService.bookMarkDeck(userId, id);
+                res.status(201).json('Added successfully').end;
+            }
+            else {
+                yield flashcardService.unbookMarkDeck(userId, id);
+                res.status(202).json('Removed successfully').end();
+            }
+        }
+        else {
+            res.status(403).json('Cannot bookmark').end();
+        }
     }
     catch (err) {
         const errors = mapErrors(err);

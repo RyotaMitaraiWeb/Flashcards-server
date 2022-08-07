@@ -43,9 +43,29 @@ const userSchema = new Schema({
             ref: 'Deck',
         },
     ],
-    preferences: {
-        type: Types.ObjectId,
-        ref: 'Preference',
+    animation: {
+        type: String,
+        enum: {
+            values: ['vertical', 'horizontal'],
+            messsage: 'Анимацията е невалидна',
+        },
+        default: 'vertical',
+    },
+    theme: {
+        type: String,
+        enum: {
+            values: ['light', 'dark'],
+            message: 'Невалиден режим'
+        },
+        default: 'light',
+    },
+    colorTheme: {
+        type: String,
+        enum: {
+            values: ['purple', 'blue', 'green', 'pink', 'brown'],
+            message: 'Невалиден цветен режим'
+        },
+        default: 'purple',
     },
 });
 

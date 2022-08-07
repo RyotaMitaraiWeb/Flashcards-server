@@ -4,6 +4,7 @@ import Deck from '../models/Deck.js';
 import User from '../models/User.js';
 import Flashcard from '../models/Flashcard.js';
 
+
 async function getDeck(id: string): Promise<IDeck> {
     const deck = <IDeck>await Deck.findById(id);
     return deck;
@@ -15,7 +16,7 @@ async function getDecks(userId: string): Promise<IDeck[]> {
         return await getDeck(d);
     }));
 
-    const filteredDecks: IDeck[] = decks.filter((d: IDeck) => d !== null);
+    const filteredDecks: IDeck[] = decks.filter((d: IDeck) => d !== null).reverse();
     return filteredDecks;
 }
 
@@ -72,7 +73,7 @@ async function createFlashcard(data: any): Promise<IFlashcard> {
     return flashcard;
 }
 
-async function editDeck(data: Request, deckId: string, flashcards: IFlashcard[]) {    
+async function editDeck(data: Request, deckId: string, flashcards: IFlashcard[]) {
     const title: string = data.body.title;
     const description: string = data.body.description;
     const user: IToken = data.accessToken;
@@ -86,14 +87,14 @@ async function editDeck(data: Request, deckId: string, flashcards: IFlashcard[])
         author,
         authorUsername,
         flashcards,
-    };    
-    
+    };
+
     const deck: IDeck = <IDeck>await Deck.findByIdAndUpdate(deckId, payload, {
         runValidators: true,
     });
 
     await deck.save();
-//
+    //
     return deck;
 }
 

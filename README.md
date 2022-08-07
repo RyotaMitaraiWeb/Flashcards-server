@@ -4,7 +4,6 @@ A TypeScript + Express server application, designed to handle requests from the 
 ## Installation
 To run the server, navigate to the root directory in your terminal and run:
 
-Download the project and run:
 ```bash
 npm install
 npm start

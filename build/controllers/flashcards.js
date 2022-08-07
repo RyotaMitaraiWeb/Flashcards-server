@@ -16,6 +16,16 @@ router.get('/flashcard/saved', jwtService.verifyToken, (req, res) => __awaiter(v
         res.status(404).json(errors).end();
     }
 }));
+router.get('/flashcard/all', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const decks = yield flashcardService.getAllDecks();
+        res.status(200).json(decks).end();
+    }
+    catch (err) {
+        const errors = mapErrors(err);
+        res.status(404).json(errors).end();
+    }
+}));
 router.get('/flashcard/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;

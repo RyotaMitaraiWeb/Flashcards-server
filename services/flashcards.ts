@@ -20,6 +20,11 @@ async function getDecks(userId: string): Promise<IDeck[]> {
     return filteredDecks;
 }
 
+async function getAllDecks(): Promise<IDeck[]> {
+    const decks: IDeck[] = <IDeck[]>await Deck.find({});
+    return decks;
+}
+
 async function getFlashcard(id: string): Promise<IFlashcard> {
     const flashcard = <IFlashcard>await Flashcard.findById(id);
     return flashcard;
@@ -99,13 +104,14 @@ async function editDeck(data: Request, deckId: string, flashcards: IFlashcard[])
 }
 
 async function deleteDeck(deckId: string): Promise<IDeck> {
-    const deck: IDeck = <IDeck>await Deck.findByIdAndDelete(deckId);
+    const deck: IDeck = <IDeck>await Deck.findByIdAndDelete(deckId).lean();
     return deck;
 }
 
 const flashcardService = {
     getDeck,
     getDecks,
+    getAllDecks,
     getFlashcard,
     getFlashcards,
     createDeck,

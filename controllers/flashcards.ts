@@ -19,6 +19,16 @@ router.get('/flashcard/saved', jwtService.verifyToken, async (req: Request, res:
     }
 });
 
+router.get('/flashcard/all', async (_req: Request, res: Response) => {
+    try {
+        const decks: IDeck[] = await flashcardService.getAllDecks();
+        res.status(200).json(decks).end();
+    } catch (err) {
+        const errors = mapErrors(err);
+        res.status(404).json(errors).end();
+    }
+});
+
 router.get('/flashcard/:id', async (req: Request, res: Response) => {
     try {        
         const id: string = req.params.id;        

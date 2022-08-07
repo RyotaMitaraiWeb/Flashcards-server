@@ -19,6 +19,12 @@ function getDecks(userId) {
         return filteredDecks;
     });
 }
+function getAllDecks() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const decks = yield Deck.find({});
+        return decks;
+    });
+}
 function getFlashcard(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const flashcard = yield Flashcard.findById(id);
@@ -93,13 +99,14 @@ function editDeck(data, deckId, flashcards) {
 }
 function deleteDeck(deckId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const deck = yield Deck.findByIdAndDelete(deckId);
+        const deck = yield Deck.findByIdAndDelete(deckId).lean();
         return deck;
     });
 }
 const flashcardService = {
     getDeck,
     getDecks,
+    getAllDecks,
     getFlashcard,
     getFlashcards,
     createDeck,

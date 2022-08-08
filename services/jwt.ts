@@ -40,7 +40,7 @@ function verifyToken(req: Express.Request, res: Response, next: NextFunction): v
     }
 }
 
-function blacklistToken(req: Express.Request, _res: Response, next: NextFunction) {
+function blacklistToken(req: Express.Request, _res: Response, next: NextFunction): void {
     const token: string = req.cookies.accessToken;
     blacklist.add(token);
     next();

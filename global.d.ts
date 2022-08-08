@@ -39,7 +39,6 @@ declare global {
             isAuthor: boolean,
             deck: IDeck,
             hasBookmarked: boolean,
-            canBookmark: boolean,
         }
     }
 }

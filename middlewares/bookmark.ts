@@ -13,7 +13,6 @@ async function hasBookmarked(req: Request, res: Response, next: NextFunction) {
         
         const decks: string[] = user.decks.map((id: Types.ObjectId) => id.toString());
         req.hasBookmarked = decks.includes(deckId);        
-        req.canBookmark = !(req.hasBookmarked || req.isAuthor);
         next();
     } catch (err) {
         res.status(404).json('Тестето не съществува').end();

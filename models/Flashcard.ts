@@ -6,13 +6,13 @@ const flashcardSchema: mongoose.Schema = new Schema({
         type: String,
         trim: true,
         maxlength: [75, 'Предната част не може да бъде повече от 75 символа'],
-        default: '',
+        required: [true, 'Предната част е задължителна']
     },
     back: {
         type: String,
         maxlength: [75, 'Предната част не може да бъде повече от 75 символа'],
         trim: true,
-        default: ''
+        required: [true, 'Задната част е задължителна']
     },
 });
 

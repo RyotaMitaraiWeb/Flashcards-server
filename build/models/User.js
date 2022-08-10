@@ -31,7 +31,7 @@ const userSchema = new Schema({
         required: [true, 'Имейлът е задължилтено'],
         validate: {
             validator(value) {
-                return /^.*?@.*?\..*?$/.test(value);
+                return /^.*?@.+/.test(value);
             },
             message: 'Имейлът е в невалиден формат'
         },

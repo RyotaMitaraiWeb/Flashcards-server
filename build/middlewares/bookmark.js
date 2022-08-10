@@ -9,7 +9,6 @@ function hasBookmarked(req, res, next) {
             const user = yield userService.findUserById(userId);
             const decks = user.decks.map((id) => id.toString());
             req.hasBookmarked = decks.includes(deckId);
-            req.canBookmark = !(req.hasBookmarked || req.isAuthor);
             next();
         }
         catch (err) {

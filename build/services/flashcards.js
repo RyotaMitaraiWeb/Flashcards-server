@@ -8,6 +8,14 @@ function getDeck(id) {
         return deck;
     });
 }
+function getDecksByTitle(title) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const decks = yield Deck.find({
+            title: new RegExp(title, 'i')
+        });
+        return decks;
+    });
+}
 function getRandomDeck() {
     return __awaiter(this, void 0, void 0, function* () {
         const decks = yield getAllDecks();
@@ -131,6 +139,7 @@ function deleteDeck(deckId) {
 const flashcardService = {
     getDeck,
     getDecks,
+    getDecksByTitle,
     getRandomDeck,
     getAllDecks,
     bookMarkDeck,

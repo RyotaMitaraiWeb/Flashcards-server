@@ -8,6 +8,14 @@ async function getDeck(id: string): Promise<IDeck> {
     return deck;
 }
 
+async function getDecksByTitle(title: string): Promise<IDeck[]> {
+    const decks: IDeck[] = <IDeck[]> await Deck.find({
+        title: new RegExp(title, 'i')
+    });
+
+    return decks;
+}
+
 async function getRandomDeck(): Promise<IDeck> {
     const decks: IDeck[] = await getAllDecks();
     const length: number = decks.length;
@@ -132,6 +140,7 @@ async function deleteDeck(deckId: string): Promise<IDeck> {
 const flashcardService = {
     getDeck,
     getDecks,
+    getDecksByTitle,
     getRandomDeck,
     getAllDecks,
     bookMarkDeck,

@@ -12,7 +12,7 @@ router.get('/flashcard/saved', jwtService.verifyToken, async (req: Request, res:
     try {
         const id: string = req.accessToken._id;
         // console.log();
-        
+
         const decks: IDeck[] = await flashcardService.getDecks(id)
 
         res.status(200).json(decks).end();
@@ -20,6 +20,18 @@ router.get('/flashcard/saved', jwtService.verifyToken, async (req: Request, res:
         const errors = mapErrors(err);
         res.status(404).json(errors).end();
     }
+});
+
+router.get('/flashcard/search', async (req: Request, res: Response) => {
+    try {
+        const title: string = <string>req.query.title;
+        const decks: IDeck[] = await flashcardService.getDecksByTitle(title);
+        res.status(200).json(decks).end();
+    } catch (err) {
+        const errors = mapErrors(err);
+        res.status(400).json(errors).end();
+    }
+
 });
 
 router.get('/flashcard/random', async (_req: Request, res: Response) => {
@@ -42,10 +54,10 @@ router.get('/flashcard/all', async (_req: Request, res: Response) => {
 });
 
 router.get('/flashcard/:id', async (req: Request, res: Response) => {
-    try {        
-        const id: string = req.params.id;        
+    try {
+        const id: string = req.params.id;
         const deck = await flashcardService.getDeck(id);
-        
+
         const flashcards: IFlashcard[] = await flashcardService.getFlashcards(deck);
         res.status(200).json({
             deck,
@@ -123,10 +135,10 @@ router.put('/flashcard/:id/edit', jwtService.verifyToken, isAuthor, isAuthorized
         const newDeck: IDeck = await flashcardService.editDeck(req, id, newFlashcards);
         res.status(202).json(newDeck._id).end();
 
-    } catch (err) {        
+    } catch (err) {
         const errors = mapErrors(err);
         console.log(errors);
-        
+
 
         res.status(400).json(errors).end();
     }

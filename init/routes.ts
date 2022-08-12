@@ -7,4 +7,9 @@ export default async function configureRoutes(app: Express): Promise<void> {
     app.use(auth);
     app.use(flashcards);
     app.use(profile);
+    app.get('/', (_req, res) => {
+        res.json({
+            status: 'good'
+        });
+    })
 }

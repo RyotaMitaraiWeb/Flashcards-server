@@ -7,5 +7,10 @@ export default function configureRoutes(app) {
         app.use(auth);
         app.use(flashcards);
         app.use(profile);
+        app.get('/', (_req, res) => {
+            res.json({
+                status: 'good'
+            });
+        });
     });
 }

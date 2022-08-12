@@ -2,7 +2,7 @@ import { __awaiter } from "tslib";
 import pkg from 'mongoose';
 const { Schema, model, Types } = pkg;
 import userService from '../services/user.js';
-import Preference from './Preference.js';
+// import Preference from './Preference.js';
 import bcrypt from 'bcrypt';
 const userSchema = new Schema({
     username: {
@@ -90,14 +90,6 @@ userSchema.pre('save', function (next) {
         try {
             const hashedPassword = yield bcrypt.hash(user.password, 10);
             user.password = hashedPassword;
-            const preferences = new Preference({
-                user: user._id,
-                theme: 'light',
-                colorTheme: 'purple',
-                animation: 'vertical',
-            });
-            yield preferences.save();
-            user.preferences = preferences._id;
             return next();
         }
         catch (err) {

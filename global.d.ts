@@ -5,14 +5,6 @@ import mongoose from 'mongoose';
 export { };
 
 declare global {
-    /**
-     * interface that holds user: Document and token: string properties
-     */
-    interface IResult {
-        user: Document,
-        token: string,
-    }
-
     interface IDeck extends mongoose.Document {
         title: string,
         description: string,
@@ -28,6 +20,18 @@ declare global {
     interface IToken extends JwtPayload {
         username: string,
         _id: string,
+    }
+
+    interface IUser extends mongoose.Document {
+        username: string,
+        _id: string,
+        password: string,
+        email: string,
+        decks: IDeck[],
+        theme: 'light' | 'dark',
+        colorTheme: 'purple' | 'blue' | 'brown' | 'green' | 'pink',
+        animation: 'vertical' | 'horizontal',
+
     }
 
     namespace Express {

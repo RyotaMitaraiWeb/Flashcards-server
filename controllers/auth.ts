@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/register', async (req: Request, res: Response) => {
     try {
         const { username, email, password }: any = req.body;
-        const user = await authService.register(username, password, email);
+        const user: IUser = await authService.register(username, password, email);
         const accessToken: string = jwtService.generateToken(user);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
@@ -32,7 +32,7 @@ router.post('/login', async (req: Request, res: Response) => {
         const username: string = req.body.username.trim();
         const password: string = req.body.password.trim();
 
-        const user = await authService.login(username, password);
+        const user: IUser = await authService.login(username, password);
         const accessToken: string = jwtService.generateToken(user);
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
@@ -55,7 +55,7 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 router.get('/isLogged', jwtService.verifyToken, (req: Express.Request, res: Response) => {
-    const token: any = req.accessToken;
+    const token: IToken = req.accessToken;
     res.status(200).json({
         username: token.username,
         id: token._id,
@@ -78,8 +78,8 @@ router.post('/exists', async (req: Request, res: Response) => {
     const username: string = req.body.username?.trim();
     const email: string = req.body.email?.trim();
     let error: string = '';
-    const usernameIsFree = await userService.findUserByUsername(username);
-    const emailIsFree = await userService.findUserByEmail(email);
+    const usernameIsFree: IUser | null = await userService.findUserByUsername(username);
+    const emailIsFree: IUser | null = await userService.findUserByEmail(email);
 
     if (username && usernameIsFree !== null) {
         error = 'Потребителското име е заето';

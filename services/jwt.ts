@@ -5,7 +5,7 @@ const blacklist: Set<string> = new Set();
 
 const jwt = jsonwebtoken;
 
-function generateToken(user: any): string {
+function generateToken(user: IUser): string {
     const payload: {} = {
         username: user.username,
         _id: user._id,

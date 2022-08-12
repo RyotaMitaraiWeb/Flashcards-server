@@ -28,7 +28,7 @@ function getDecks(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield User.findById(userId);
         const decks = yield Promise.all(user.decks.map((d) => __awaiter(this, void 0, void 0, function* () {
-            return yield getDeck(d);
+            return yield getDeck(d._id);
         })));
         const filteredDecks = decks.filter((d) => d !== null).reverse();
         return filteredDecks;

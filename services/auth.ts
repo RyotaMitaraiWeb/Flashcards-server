@@ -2,20 +2,20 @@ import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import userService from './user.js';
 
-async function register(username: string, password: string, email: string): Promise<any> {
-    const user = new User({
+async function register(username: string, password: string, email: string): Promise<IUser> {
+    const user: IUser = <IUser>new User({
         username,
         password,
         email,
     });
-    
+
     await user.save();
 
     return user;
 }
 
-async function login(username: string, password: string): Promise<any> {
-    const user: any = await userService.findUserByUsername(username);
+async function login(username: string, password: string): Promise<IUser> {
+    const user: IUser = <IUser>await userService.findUserByUsername(username);
     if (!user) {
         throw new Error('Грешно потребителско име или парола');
     }
@@ -24,7 +24,7 @@ async function login(username: string, password: string): Promise<any> {
     if (!comparison) {
         throw new Error('Грешно потребителско име или парола');
     }
-    
+
     return user;
 }
 

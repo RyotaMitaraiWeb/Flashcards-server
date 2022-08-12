@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/profile', jwtService.verifyToken, async (req: Request, res: Response) => {
     try {
         const id = req.accessToken._id;
-        const user: any = await userService.findUserById(id);
+        const user: IUser = await userService.findUserById(id);
         
         res.status(200).json({
             theme: user.theme,

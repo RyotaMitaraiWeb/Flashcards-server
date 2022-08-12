@@ -24,9 +24,9 @@ async function getRandomDeck(): Promise<IDeck> {
 }
 
 async function getDecks(userId: string): Promise<IDeck[]> {
-    const user: any = await User.findById(userId);
-    const decks: IDeck[] = await Promise.all(user.decks.map(async (d: string) => {
-        return await getDeck(d);
+    const user: IUser = <IUser>await User.findById(userId);
+    const decks: IDeck[] = await Promise.all(user.decks.map(async (d: IDeck) => {
+        return await getDeck(d._id);
     }));
 
     const filteredDecks: IDeck[] = decks.filter((d: IDeck) => d !== null).reverse();
@@ -94,7 +94,7 @@ async function createDeck(data: Request, flashcards: IFlashcard[]): Promise<IDec
     return deck;
 }
 
-async function createFlashcard(data: any): Promise<IFlashcard> {
+async function createFlashcard(data: IFlashcard): Promise<IFlashcard> {
     const front: string = data.front.trim();
     const back: string = data.back.trim();
 

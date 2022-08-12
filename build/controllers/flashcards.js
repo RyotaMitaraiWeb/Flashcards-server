@@ -9,7 +9,6 @@ import { router } from './auth.js';
 router.get('/flashcard/saved', jwtService.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.accessToken._id;
-        // console.log();
         const decks = yield flashcardService.getDecks(id);
         res.status(200).json(decks).end();
     }

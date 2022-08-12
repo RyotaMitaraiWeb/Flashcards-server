@@ -11,10 +11,7 @@ import { router } from './auth.js';
 router.get('/flashcard/saved', jwtService.verifyToken, async (req: Request, res: Response) => {
     try {
         const id: string = req.accessToken._id;
-        // console.log();
-
         const decks: IDeck[] = await flashcardService.getDecks(id)
-
         res.status(200).json(decks).end();
     } catch (err) {
         const errors = mapErrors(err);
@@ -75,7 +72,7 @@ router.get('/flashcard/:id/hasBookmarked', jwtService.verifyToken, isAuthor, has
     const id = req.params.id;
     const userId = req.accessToken._id;
 
-    const user: any = await userService.findUserById(userId);
+    const user: IUser = await userService.findUserById(userId);
     const decks = user.decks.map((d: Types.ObjectId) => d.toString());
     if (decks.includes(id)) {
         res.status(200).end();
@@ -112,7 +109,7 @@ router.post('/flashcard/create', jwtService.verifyToken, async (req: Request, re
     let flashcards: IFlashcard[] = [];
 
     try {
-        flashcards = await Promise.all(req.body.flashcards.map(async (f: any) => await flashcardService.createFlashcard(f)));
+        flashcards = await Promise.all(req.body.flashcards.map(async (f: IFlashcard) => await flashcardService.createFlashcard(f)));
         try {
             deck = await flashcardService.createDeck(req, flashcards);
             res.status(201).json(deck._id).end();
@@ -131,7 +128,7 @@ router.put('/flashcard/:id/edit', jwtService.verifyToken, isAuthor, isAuthorized
     try {
         const id: string = req.params.id;
         const flashcards: IFlashcard[] = req.body.flashcards;
-        const newFlashcards: IFlashcard[] = await Promise.all(flashcards.map(async (f: any) => await flashcardService.createFlashcard(f)));
+        const newFlashcards: IFlashcard[] = await Promise.all(flashcards.map(async (f: IFlashcard) => await flashcardService.createFlashcard(f)));
         const newDeck: IDeck = await flashcardService.editDeck(req, id, newFlashcards);
         res.status(202).json(newDeck._id).end();
 

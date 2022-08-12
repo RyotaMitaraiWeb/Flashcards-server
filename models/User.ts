@@ -1,7 +1,7 @@
 import pkg from 'mongoose';
 const { Schema, model, Types } = pkg;
 import userService from '../services/user.js';
-import Preference from './Preference.js';
+// import Preference from './Preference.js';
 import bcrypt from 'bcrypt';
 
 const userSchema = new Schema({
@@ -70,7 +70,7 @@ const userSchema = new Schema({
 });
 
 userSchema.pre('validate', async function (next) {
-    const user: any = this;
+    const user: IUser = <IUser> this;
     const username: pkg.Document | null = await userService.findUserByUsername(user.username);
 
     if (username !== null) {
@@ -87,22 +87,12 @@ userSchema.pre('validate', async function (next) {
 });
 
 userSchema.pre('save', async function (next) {
-    const user: any = this;
+    const user: IUser = <IUser> this;
     if (!user.isModified('password')) return next();
     try {
         const hashedPassword = await bcrypt.hash(user.password, 10);
         user.password = hashedPassword;
 
-        const preferences = new Preference({
-            user: user._id,
-            theme: 'light',
-            colorTheme: 'purple',
-            animation: 'vertical',
-        });
-
-        await preferences.save();
-
-        user.preferences = preferences._id;
         return next();
     } catch (err: any) {
         return next(err);

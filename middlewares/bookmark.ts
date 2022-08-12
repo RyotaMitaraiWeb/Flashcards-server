@@ -9,7 +9,7 @@ async function hasBookmarked(req: Request, res: Response, next: NextFunction) {
         const userId: string = token._id;
         const deckId = req.params.id;
         
-        const user: any = await userService.findUserById(userId);
+        const user: IUser = await userService.findUserById(userId);
         
         const decks: string[] = user.decks.map((id: Types.ObjectId) => id.toString());
         req.hasBookmarked = decks.includes(deckId);        

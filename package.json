@@ -11,6 +11,9 @@
   },
   "keywords": [],
   "author": "",
+  "engines": {
+    "node": "14.18.1"
+  },
   "license": "MIT",
   "dependencies": {
     "@types/bcrypt": "^5.0.0",

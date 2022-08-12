@@ -6,11 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node build/index.js",
-    "postinstall": "tsc",
-    "watch-node": "nodemon build/index.js",
-    "watch-ts": "tsc -w",
-    "deploy": "git add . && git commit -m Heroku && git push heroku master"
-},
+    "postinstall": "tsc"
+  },
   "keywords": [],
   "author": "",
   "engines": {

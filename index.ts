@@ -5,5 +5,6 @@ import start from './init/app.js';
 dotenv.config();
 
 const app: Express = express();
+console.log('test');
 
 start(app);

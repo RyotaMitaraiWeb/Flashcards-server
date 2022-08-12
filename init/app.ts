@@ -8,7 +8,7 @@ async function start(app: Express): Promise<void> {
     app.use(cookieParser());
     console.log(process.env.PORT);
 
-    const port: string | undefined = '5000';
+    const port = 5000;
     app.use(express.json());
     app.use(cors({
         origin: ['http://localhost:3000', 'http://192.168.0.104:3000'],

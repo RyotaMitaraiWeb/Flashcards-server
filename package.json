@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node ./build/index.js",
-    "start-dev": "nodemon ./build/index.js"
+    "start-dev": "nodemon ./build/index.js",
+    "tsc": "tsc",
+    "postinstall": "npm run tsc"
   },
   "keywords": [],
   "author": "",

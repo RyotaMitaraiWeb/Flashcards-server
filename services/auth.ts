@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import userService from './user.js';
 
 async function register(username: string, password: string, email: string): Promise<IUser> {
-    const user: IUser = <IUser>new User({
+    const user: any = new User({
         username,
         password,
         email,

@@ -70,7 +70,7 @@ const userSchema = new Schema({
 });
 
 userSchema.pre('validate', async function (next) {
-    const user: IUser = <IUser> this;
+    const user: any = this;
     const username: pkg.Document | null = await userService.findUserByUsername(user.username);
 
     if (username !== null) {
@@ -87,7 +87,7 @@ userSchema.pre('validate', async function (next) {
 });
 
 userSchema.pre('save', async function (next) {
-    const user: IUser = <IUser> this;
+    const user: any = this;
     if (!user.isModified('password')) return next();
     try {
         const hashedPassword = await bcrypt.hash(user.password, 10);

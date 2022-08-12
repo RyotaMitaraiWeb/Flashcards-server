@@ -82,7 +82,7 @@ async function createDeck(data: Request, flashcards: IFlashcard[]): Promise<IDec
         flashcards,
     };
 
-    const deck: IDeck = <IDeck>new Deck(payload);
+    const deck: any = new Deck(payload);
     await deck.save();
 
     await User.findByIdAndUpdate(author, {

@@ -1,1 +1,1 @@
-worker: npm start-production
+worker: node build/index.js

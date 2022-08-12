@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { Types } from 'mongoose';
 import { hasBookmarked } from '../middlewares/bookmark.js';
 import { isAuthor, isAuthorized } from '../middlewares/guards.js';
 import flashcardService from '../services/flashcards.js';
@@ -73,7 +72,7 @@ router.get('/flashcard/:id/hasBookmarked', jwtService.verifyToken, isAuthor, has
     const userId = req.accessToken._id;
 
     const user: IUser = await userService.findUserById(userId);
-    const decks = user.decks.map((d: Types.ObjectId) => d.toString());
+    const decks = user.decks.map((d: IDeck) => d._id.toString());
     if (decks.includes(id)) {
         res.status(200).end();
     } else {

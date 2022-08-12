@@ -66,7 +66,7 @@ router.get('/flashcard/:id/hasBookmarked', jwtService.verifyToken, isAuthor, has
     const id = req.params.id;
     const userId = req.accessToken._id;
     const user = yield userService.findUserById(userId);
-    const decks = user.decks.map((d) => d.toString());
+    const decks = user.decks.map((d) => d._id.toString());
     if (decks.includes(id)) {
         res.status(200).end();
     }

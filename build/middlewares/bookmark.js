@@ -7,7 +7,7 @@ function hasBookmarked(req, res, next) {
             const userId = token._id;
             const deckId = req.params.id;
             const user = yield userService.findUserById(userId);
-            const decks = user.decks.map((id) => id.toString());
+            const decks = user.decks.map((d) => d._id.toString());
             req.hasBookmarked = decks.includes(deckId);
             next();
         }

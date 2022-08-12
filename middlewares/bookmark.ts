@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { Types } from "mongoose";
 import userService from "../services/user.js";
 
 
@@ -11,7 +10,7 @@ async function hasBookmarked(req: Request, res: Response, next: NextFunction) {
         
         const user: IUser = await userService.findUserById(userId);
         
-        const decks: string[] = user.decks.map((id: Types.ObjectId) => id.toString());
+        const decks: string[] = user.decks.map((d: IDeck) => d._id.toString());
         req.hasBookmarked = decks.includes(deckId);        
         next();
     } catch (err) {

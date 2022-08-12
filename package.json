@@ -5,11 +5,12 @@
   "main": "./build/index.js",
   "type": "module",
   "scripts": {
-    "start": "node ./build/index.js",
-    "start-dev": "nodemon ./build/index.js",
-    "tsc": "./node_modules/typescript/bin/tsc",
-    "postinstall": "npm run tsc"
-  },
+    "start": "node build/index.js",
+    "postinstall": "tsc",
+    "watch-node": "nodemon build/index.js",
+    "watch-ts": "tsc -w",
+    "deploy": "git add . && git commit -m Heroku && git push heroku master"
+},
   "keywords": [],
   "author": "",
   "engines": {

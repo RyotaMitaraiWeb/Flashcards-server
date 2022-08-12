@@ -1,14 +1,13 @@
 import express, { Express } from 'express';
-import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import connectToDB from './db.js';
 import configureRoutes from './routes.js';
-
 import cors from 'cors';
 
 async function start(app: Express): Promise<void> {
     app.use(cookieParser());
-    dotenv.config();
+    console.log(process.env.PORT);
+
     const port: string | undefined = process.env.PORT || '5500';
     app.use(express.json());
     app.use(cors({

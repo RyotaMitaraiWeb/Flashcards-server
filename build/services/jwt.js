@@ -1,12 +1,13 @@
 import jsonwebtoken from 'jsonwebtoken';
 const blacklist = new Set();
+const secret = process.env.SECRET || '12mgo203gokwasA2O';
 const jwt = jsonwebtoken;
 function generateToken(user) {
     const payload = {
         username: user.username,
         _id: user._id,
     };
-    const token = jwt.sign(payload, '12mgo203gokwasA2O', {
+    const token = jwt.sign(payload, secret, {
         expiresIn: '60 days',
     });
     return token;
@@ -17,7 +18,7 @@ function verifyToken(req, res, next) {
         if (blacklist.has(token)) {
             throw new Error();
         }
-        const accessToken = jwt.verify(token, '12mgo203gokwasA2O');
+        const accessToken = jwt.verify(token, secret);
         req.accessToken = accessToken;
         next();
     }

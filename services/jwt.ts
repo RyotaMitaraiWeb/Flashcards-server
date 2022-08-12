@@ -1,7 +1,8 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jsonwebtoken from 'jsonwebtoken';
 
 const blacklist: Set<string> = new Set();
+const secret: string = process.env.SECRET || '12mgo203gokwasA2O';
 
 const jwt = jsonwebtoken;
 
@@ -11,7 +12,7 @@ function generateToken(user: IUser): string {
         _id: user._id,
     };
 
-    const token: string = jwt.sign(payload, '12mgo203gokwasA2O', {
+    const token: string = jwt.sign(payload, secret, {
         expiresIn: '60 days',
     });
     
@@ -24,7 +25,8 @@ function verifyToken(req: Express.Request, res: Response, next: NextFunction): v
         if (blacklist.has(token)) {
             throw new Error();
         }
-        const accessToken: IToken = <IToken>jwt.verify(token, '12mgo203gokwasA2O');
+
+        const accessToken: IToken = <IToken>jwt.verify(token, secret);
         req.accessToken = accessToken;
         next();
     } catch (err: any) {
@@ -40,7 +42,7 @@ function verifyToken(req: Express.Request, res: Response, next: NextFunction): v
     }
 }
 
-function blacklistToken(req: Express.Request, _res: Response, next: NextFunction): void {
+function blacklistToken(req: Request, _res: Response, next: NextFunction): void {
     const token: string = req.cookies.accessToken;
     blacklist.add(token);
     next();

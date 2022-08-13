@@ -5,7 +5,7 @@ const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/flashcards';
 mongoose.set('runValidators', true);
 
 async function connectToDB(): Promise<void> {
-    mongoose.connect(url, {
+    await mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });

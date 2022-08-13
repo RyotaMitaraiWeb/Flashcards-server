@@ -102,6 +102,9 @@ router.post('/flashcard/create', jwtService.verifyToken, (req, res) => __awaiter
     let deck = null;
     let flashcards = [];
     try {
+        if (req.body.flashcards.length > 75) {
+            throw new Error('Флашкартите трябва да се не повече от 75!');
+        }
         flashcards = yield Promise.all(req.body.flashcards.map((f) => __awaiter(void 0, void 0, void 0, function* () { return yield flashcardService.createFlashcard(f); })));
         try {
             deck = yield flashcardService.createDeck(req, flashcards);

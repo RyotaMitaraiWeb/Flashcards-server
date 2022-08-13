@@ -108,6 +108,10 @@ router.post('/flashcard/create', jwtService.verifyToken, async (req: Request, re
     let flashcards: IFlashcard[] = [];
 
     try {
+        if (req.body.flashcards.length > 75) {
+            throw new Error('Флашкартите трябва да се не повече от 75!');
+        }
+        
         flashcards = await Promise.all(req.body.flashcards.map(async (f: IFlashcard) => await flashcardService.createFlashcard(f)));
         try {
             deck = await flashcardService.createDeck(req, flashcards);

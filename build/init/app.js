@@ -11,7 +11,7 @@ function start(app) {
         const port = process.env.PORT || 5500;
         app.use(express.json());
         app.use(cors({
-            origin: '*',
+            origin: ['http://localhost:3000', 'http://192.168.0.104:3000', 'https://flashcards-da911.web.app'],
             credentials: true,
         }));
         connectToDB();

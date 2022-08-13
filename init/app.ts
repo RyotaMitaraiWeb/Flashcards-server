@@ -15,7 +15,7 @@ async function start(app: Express): Promise<void> {
         credentials: true,
     }));
 
-    await connectToDB();
+    connectToDB();
     await configureRoutes(app);
     app.listen(port, () => {
         console.log('Listening on port ' + port);

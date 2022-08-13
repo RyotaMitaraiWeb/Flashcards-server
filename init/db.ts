@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const url = 'mongodb://localhost:27017/flashcards';
+const url = 'mongodb+srv://prod:prod-key-123456@flashcards.f2qklxm.mongodb.net/?retryWrites=true&w=majority';
 
 mongoose.set('runValidators', true);
 

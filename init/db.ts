@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 
-const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/flashcards';
-
-mongoose.set('runValidators', true);
-
 async function connectToDB(): Promise<void> {
-    mongoose.set("useNewUrlParser", true);
-    await mongoose.connect(url);
+    const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/flashcards';
+
+    mongoose.set('runValidators', true);
+    await mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
 
     console.log('connected to DB');
 }

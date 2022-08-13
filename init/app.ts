@@ -8,14 +8,14 @@ async function start(app: Express): Promise<void> {
     app.use(cookieParser());
     console.log(process.env.PORT);
 
-    const port = process.env.PORT || 5500;
+    const port = 5000;
     app.use(express.json());
     app.use(cors({
-        origin: ['http://localhost:3000', 'http://192.168.0.104:3000', 'https://flashcards-da911.web.app'],
+        origin: ['http://localhost:3000', 'http://192.168.0.104:3000'],
         credentials: true,
     }));
 
-    connectToDB();
+    await connectToDB();
     await configureRoutes(app);
     app.listen(port, () => {
         console.log('Listening on port ' + port);
